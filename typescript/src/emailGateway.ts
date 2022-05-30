@@ -1,8 +1,12 @@
 import nodemailer from "nodemailer";
-import Mail from "nodemailer/lib/mailer";
+import {Delivery} from "./deliveryController";
 
 
-export class EmailGateway{
+export interface IFeedbackRequester {
+    send(address: string, subject: string, message: string): Promise<any>;
+}
+
+export class EmailGateway implements IFeedbackRequester {
 
     #transport: nodemailer.Transporter
 
@@ -16,7 +20,7 @@ export class EmailGateway{
 
     }
 
-    public async send(address: string, subject: string, message: string) {
+    async send(address: string, subject: string, message: string) {
         return this.#transport.sendMail({
             subject,
             to: address,

@@ -1,4 +1,4 @@
-import {EmailGateway} from './emailGateway'
+import {EmailGateway, IFeedbackRequester} from './emailGateway'
 import {Location, MapService} from './mapService';
 
 const TEN_MINUTES = 1000 * 60 * 10;
@@ -19,14 +19,14 @@ export interface DeliveryEvent {
 }
 
 export class DeliveryController {
-    #emailGateway: EmailGateway;
+    #emailGateway: IFeedbackRequester;
     #mapService: MapService;
     #deliveries: Array<Delivery>;
 
-    constructor(deliveries: Array<Delivery>) {
+    constructor(deliveries: Array<Delivery>, emailGateway: IFeedbackRequester = new EmailGateway()) {
         this.#deliveries = deliveries;
         this.#mapService = new MapService();
-        this.#emailGateway = new EmailGateway();
+        this.#emailGateway = emailGateway;
     }
 
     public async updateDelivery(event: DeliveryEvent) {
