@@ -36,7 +36,7 @@ export class DeliveryController {
             const delivery = this.#deliveries[i];
             if (delivery.id === event.id) {
                 delivery.arrived = true;
-                var timeDifference = event.timeOfDelivery.getTime() - delivery.timeOfDelivery.getTime();
+                const timeDifference = event.timeOfDelivery.getTime() - delivery.timeOfDelivery.getTime();
                 if (timeDifference < TEN_MINUTES) {
                     delivery.onTime = true;
                 }
@@ -48,15 +48,15 @@ export class DeliveryController {
                 }
 
                 if(!delivery.onTime && this.#deliveries.length > 1 && i > 0) {
-                    var previousDelivery = this.#deliveries[i - 1];
-                    var elapsedTime = delivery.timeOfDelivery.getTime() - previousDelivery.timeOfDelivery.getTime();
+                    const previousDelivery = this.#deliveries[i - 1];
+                    const elapsedTime = delivery.timeOfDelivery.getTime() - previousDelivery.timeOfDelivery.getTime();
                     this.#mapService.updateAverageSpeed(previousDelivery.location, delivery.location, elapsedTime);
                 }
             }
         }
 
         if (nextDelivery !== undefined) {
-            var nextEta = this.#mapService.calculateETA(event.location, nextDelivery.location);
+            const nextEta = this.#mapService.calculateETA(event.location, nextDelivery.location);
             const message = `Your delivery to ${nextDelivery.location} is next, estimated time of arrival is in ${nextEta} minutes. Be ready!`
             await this.#contactCustomer.notifyDeliveryEta(nextDelivery, message);
         }
