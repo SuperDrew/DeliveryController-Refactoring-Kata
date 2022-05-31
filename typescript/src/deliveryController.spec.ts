@@ -4,7 +4,7 @@ import {IContactCustomer} from "./emailGateway";
 const GREATER_THAN_TEN_MINUTES = 1000 * 60 * 10 + 1;
 
 class FakeContactCustomer implements IContactCustomer {
-    public sendCalls : {address:string, subject:string, message:string}[] = [];
+    public notifyDeliveryEtaCalls : {delivery:Delivery, message:string}[] = [];
     public requestedFeedbackCalls: {delivery: Delivery, message:string}[] = [];
 
     requestFeedback(delivery: Delivery, message: string): Promise<any> {
@@ -12,8 +12,8 @@ class FakeContactCustomer implements IContactCustomer {
         return Promise.resolve(undefined);
     }
 
-    send(address: string, subject: string, message: string): Promise<any> {
-        this.sendCalls.push({address, subject, message});
+    notifyDeliveryEta(delivery: Delivery, message: string): Promise<any> {
+        this.notifyDeliveryEtaCalls.push({delivery, message});
         return Promise.resolve(undefined);
     }
 }
@@ -88,8 +88,8 @@ describe("WTf does the controller do", () => {
             expectDeliveryToBe(deliveries[0], true, true, deliveryEvent1.timeOfDelivery);
             expectDeliveryToBe(deliveries[1], false, false, deliveries[1].timeOfDelivery);
 
-            expect(fakeContactCustomer.sendCalls).toHaveLength(1);
-            expect(fakeContactCustomer.sendCalls[0].subject).toBe("Your delivery will arrive soon.");
+            expect(fakeContactCustomer.notifyDeliveryEtaCalls).toHaveLength(1);
+            expect(fakeContactCustomer.notifyDeliveryEtaCalls[0].message).toContain("Be ready!");
 
             const deliveryEvent2 = {
                 id: id2,

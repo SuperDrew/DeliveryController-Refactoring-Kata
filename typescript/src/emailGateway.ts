@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 import {Delivery} from "./deliveryController";
 
 export interface IContactCustomer {
-    send(address: string, subject: string, message: string): Promise<any>;
+    notifyDeliveryEta(delivery: Delivery, message: string): Promise<any>;
     requestFeedback(delivery: Delivery, message: string): Promise<any>;
 }
 
@@ -29,10 +29,10 @@ export class EmailGateway implements IContactCustomer {
 
     }
 
-    async send(address: string, subject: string, message: string) {
+    async notifyDeliveryEta(delivery: Delivery, message: string): Promise<any> {
         return this.#transport.sendMail({
-            subject,
-            to: address,
+            subject: "Your delivery will arrive soon.",
+            to: delivery.contactEmail,
             text: message
         })
     }
