@@ -21,7 +21,7 @@ export interface DeliveryEvent {
 export class DeliveryController {
     #contactCustomer: IContactCustomer;
     #mapService: MapService;
-    #deliveries: Array<Delivery>;
+    readonly #deliveries: Array<Delivery>;
 
     constructor(deliveries: Array<Delivery>, contactCustomer: IContactCustomer) {
         this.#deliveries = deliveries;
