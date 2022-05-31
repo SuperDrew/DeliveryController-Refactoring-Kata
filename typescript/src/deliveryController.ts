@@ -19,14 +19,14 @@ export interface DeliveryEvent {
 }
 
 export class DeliveryController {
-    #emailGateway: IFeedbackRequester;
+    #feedbackRequester: IFeedbackRequester;
     #mapService: MapService;
     #deliveries: Array<Delivery>;
 
-    constructor(deliveries: Array<Delivery>, emailGateway: IFeedbackRequester) {
+    constructor(deliveries: Array<Delivery>, feedbackRequester: IFeedbackRequester) {
         this.#deliveries = deliveries;
         this.#mapService = new MapService();
-        this.#emailGateway = emailGateway;
+        this.#feedbackRequester = feedbackRequester;
     }
 
     public async updateDelivery(event: DeliveryEvent) {
@@ -42,7 +42,7 @@ export class DeliveryController {
                 }
                 delivery.timeOfDelivery = event.timeOfDelivery;
                 let message = `Regarding your delivery today at ${delivery.timeOfDelivery}. How likely would you be to recommend this delivery service to a friend? Click <a href='url'>here</a>`
-                await this.#emailGateway.requestFeedback(delivery, message);
+                await this.#feedbackRequester.requestFeedback(delivery, message);
                 if(this.#deliveries.length > i + 1) {
                     nextDelivery = this.#deliveries[i + 1];
                 }
@@ -58,7 +58,7 @@ export class DeliveryController {
         if (nextDelivery !== undefined) {
             var nextEta = this.#mapService.calculateETA(event.location, nextDelivery.location);
             const message = `Your delivery to ${nextDelivery.location} is next, estimated time of arrival is in ${nextEta} minutes. Be ready!`
-            await this.#emailGateway.send(nextDelivery.contactEmail, "Your delivery will arrive soon.", message);
+            await this.#feedbackRequester.send(nextDelivery.contactEmail, "Your delivery will arrive soon.", message);
         }
     }
 }
