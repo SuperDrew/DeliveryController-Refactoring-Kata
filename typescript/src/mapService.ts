@@ -1,5 +1,6 @@
 
 const MINUTES_PER_HOUR = 60;
+const SECONDS_PER_HOUR = 60 * MINUTES_PER_HOUR;
 const R = 6373.0; // Radius of the earth
 
 const radians = (d: number) : number => d * (Math.PI / 180);
@@ -39,8 +40,9 @@ export class MapService implements IMapService {
         return R * c;
     }
 
-    updateAverageSpeed(from: Location, to: Location, elapsed: number) {
-
+    public updateAverageSpeed(location1: Location, location2: Location, elapsed: number) {
+        const distance = this.calculateDistance(location1, location2)
+        this.#averageSpeed = distance / (elapsed / SECONDS_PER_HOUR)
     }
 
 }
