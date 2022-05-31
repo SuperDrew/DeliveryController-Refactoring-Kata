@@ -61,7 +61,7 @@ describe("WTf does the controller do", () => {
     })
 
     describe("when there are two deliveries", () => {
-        it("should sends an email to both deliveries if there are two delivery when it is made", () => {
+        it("should sends an email to each delivery when it is made", () => {
             const id = "1";
             const id2 = "2";
             const deliveries : Delivery[] = [createDelivery(id), createDelivery(id2)];
