@@ -4,7 +4,7 @@ import {Location, MapService} from './mapService';
 const TEN_MINUTES = 1000 * 60 * 10;
 
 export interface Delivery {
-   id: string
+    id: string
     contactEmail: string
     location: Location
     timeOfDelivery: Date
