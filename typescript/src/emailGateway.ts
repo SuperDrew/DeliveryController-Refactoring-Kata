@@ -1,12 +1,12 @@
 import nodemailer from "nodemailer";
 import {Delivery} from "./deliveryController";
 
-export interface IFeedbackRequester {
+export interface IContactCustomer {
     send(address: string, subject: string, message: string): Promise<any>;
     requestFeedback(delivery: Delivery, message: string): Promise<any>;
 }
 
-export class EmailGateway implements IFeedbackRequester {
+export class EmailGateway implements IContactCustomer {
     #transport: nodemailer.Transporter
     feedbackSubject = "Your feedback is important to us";
 

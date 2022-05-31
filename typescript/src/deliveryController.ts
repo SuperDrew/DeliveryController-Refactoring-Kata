@@ -1,4 +1,4 @@
-import {IFeedbackRequester} from './emailGateway'
+import {IContactCustomer} from './emailGateway'
 import {Location, MapService} from './mapService';
 
 const TEN_MINUTES = 1000 * 60 * 10;
@@ -19,14 +19,14 @@ export interface DeliveryEvent {
 }
 
 export class DeliveryController {
-    #feedbackRequester: IFeedbackRequester;
+    #contactCustomer: IContactCustomer;
     #mapService: MapService;
     #deliveries: Array<Delivery>;
 
-    constructor(deliveries: Array<Delivery>, feedbackRequester: IFeedbackRequester) {
+    constructor(deliveries: Array<Delivery>, contactCustomer: IContactCustomer) {
         this.#deliveries = deliveries;
         this.#mapService = new MapService();
-        this.#feedbackRequester = feedbackRequester;
+        this.#contactCustomer = contactCustomer;
     }
 
     public async updateDelivery(event: DeliveryEvent) {
@@ -42,7 +42,7 @@ export class DeliveryController {
                 }
                 delivery.timeOfDelivery = event.timeOfDelivery;
                 let message = `Regarding your delivery today at ${delivery.timeOfDelivery}. How likely would you be to recommend this delivery service to a friend? Click <a href='url'>here</a>`
-                await this.#feedbackRequester.requestFeedback(delivery, message);
+                await this.#contactCustomer.requestFeedback(delivery, message);
                 if(this.#deliveries.length > i + 1) {
                     nextDelivery = this.#deliveries[i + 1];
                 }
@@ -58,7 +58,7 @@ export class DeliveryController {
         if (nextDelivery !== undefined) {
             var nextEta = this.#mapService.calculateETA(event.location, nextDelivery.location);
             const message = `Your delivery to ${nextDelivery.location} is next, estimated time of arrival is in ${nextEta} minutes. Be ready!`
-            await this.#feedbackRequester.send(nextDelivery.contactEmail, "Your delivery will arrive soon.", message);
+            await this.#contactCustomer.send(nextDelivery.contactEmail, "Your delivery will arrive soon.", message);
         }
     }
 }
