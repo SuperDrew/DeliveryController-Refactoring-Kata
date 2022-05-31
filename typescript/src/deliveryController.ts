@@ -1,4 +1,4 @@
-import {EmailGateway, IFeedbackRequester} from './emailGateway'
+import {IFeedbackRequester} from './emailGateway'
 import {Location, MapService} from './mapService';
 
 const TEN_MINUTES = 1000 * 60 * 10;
@@ -23,7 +23,7 @@ export class DeliveryController {
     #mapService: MapService;
     #deliveries: Array<Delivery>;
 
-    constructor(deliveries: Array<Delivery>, emailGateway: IFeedbackRequester = new EmailGateway()) {
+    constructor(deliveries: Array<Delivery>, emailGateway: IFeedbackRequester) {
         this.#deliveries = deliveries;
         this.#mapService = new MapService();
         this.#emailGateway = emailGateway;
@@ -36,7 +36,7 @@ export class DeliveryController {
             const delivery = this.#deliveries[i];
             if (delivery.id === event.id) {
                 delivery.arrived = true;
-                var timeDifference = delivery.timeOfDelivery.getTime() - event.timeOfDelivery.getTime();
+                var timeDifference = event.timeOfDelivery.getTime() - delivery.timeOfDelivery.getTime();
                 if (timeDifference < TEN_MINUTES) {
                     delivery.onTime = true;
                 }

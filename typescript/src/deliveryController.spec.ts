@@ -103,6 +103,12 @@ describe("WTf does the controller do", () => {
 
                 expectDeliveryToBe(deliveries[0], true, false, deliveryEvent1.timeOfDelivery);
 
+                const deliveryEvent2 = {id: id2,
+                    timeOfDelivery: new Date(deliveryEvent1.timeOfDelivery.getTime() + GREATER_THAN_TEN_MINUTES),
+                    location: {longitude: 123, latitude: 432}};
+                deliveryController.updateDelivery(deliveryEvent2);
+
+                expectDeliveryToBe(deliveries[1], true, false, deliveryEvent2.timeOfDelivery);
 
             })
         })
