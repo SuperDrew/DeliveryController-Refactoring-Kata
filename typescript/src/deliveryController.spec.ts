@@ -1,6 +1,8 @@
 import {Delivery, DeliveryController} from "./deliveryController";
 import {IFeedbackRequester} from "./emailGateway";
 
+const GREATER_THAN_TEN_MINUTES = 1000 * 60 * 10 + 1;
+
 class FakeFeedbackRequester implements IFeedbackRequester {
     public sendCalls : {address:string, subject:string, message:string}[] = [];
 
@@ -10,14 +12,14 @@ class FakeFeedbackRequester implements IFeedbackRequester {
     }
 }
 
-function createDelivery(id: string) {
+function createDelivery(id: string, timeOfDelivery: Date = new Date()) {
     return {
         id: id,
         contactEmail: "test@test.com",
         location: {
             latitude: 12.34, longitude: 56.78
         },
-        timeOfDelivery: new Date(),
+        timeOfDelivery: timeOfDelivery,
         arrived: false,
         onTime: false
     };
@@ -85,6 +87,24 @@ describe("WTf does the controller do", () => {
 
             expectDeliveryToBe(deliveries[0], true, true, deliveryEvent1.timeOfDelivery);
             expectDeliveryToBe(deliveries[1], true, true, deliveryEvent2.timeOfDelivery);
+        })
+
+        describe("and first one is late", () => {
+            it("should update the eta for the second one", () => {
+                const id = "1";
+                const id2 = "2";
+                const deliveries : Delivery[] = [createDelivery(id), createDelivery(id2)];
+                const fakeFeedbackRequester = new FakeFeedbackRequester();
+                const deliveryController  = new DeliveryController(deliveries, fakeFeedbackRequester);
+                const deliveryEvent1 = {id: id,
+                    timeOfDelivery: new Date(deliveries[0].timeOfDelivery.getTime() + GREATER_THAN_TEN_MINUTES),
+                    location: {longitude: 123, latitude: 432}};
+                deliveryController.updateDelivery(deliveryEvent1);
+
+                expectDeliveryToBe(deliveries[0], true, false, deliveryEvent1.timeOfDelivery);
+
+
+            })
         })
 
     })
