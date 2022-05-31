@@ -1,8 +1,5 @@
 import {Delivery, DeliveryController} from "./deliveryController";
 import {IFeedbackRequester} from "./emailGateway";
-type oneortother = "A" | "B"
-
-const foo: oneortother = "A"
 
 class FakeFeedbackRequester implements IFeedbackRequester {
     public sendCalls : {address:string, subject:string, message:string}[] = [];
