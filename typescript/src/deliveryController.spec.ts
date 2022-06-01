@@ -1,10 +1,32 @@
 import {Delivery, DeliveryController} from "./deliveryController";
 import {IContactCustomer} from "./emailGateway";
+import {IMapService, Location} from "./mapService";
 
 const GREATER_THAN_TEN_MINUTES = 1000 * 60 * 10 + 1;
 
+type TwoLocations = { location1: Location, location2: Location };
+
+class FakeMapService implements IMapService {
+    public calculateDistanceCalls: TwoLocations[] = [];
+    public calculateETACalls: TwoLocations[] = [];
+    public updateAverageSpeedCalls: { from: Location, to: Location, elapsed: number }[] = [];
+    calculateDistance(location1: Location, location2: Location): number {
+        this.calculateDistanceCalls.push({location1, location2});
+        return 0;
+    }
+
+    calculateETA(location1: Location, location2: Location): number {
+        this.calculateETACalls.push({location1, location2});
+        return 0;
+    }
+
+    updateAverageSpeed(from: Location, to: Location, elapsed: number): void {
+        this.updateAverageSpeedCalls.push({from, to, elapsed});
+    }
+}
+
 class FakeContactCustomer implements IContactCustomer {
-    public notifyDeliveryEtaCalls : {delivery:Delivery, message:string}[] = [];
+    public notifyDeliveryEtaCalls: {delivery:Delivery, message:string}[] = [];
     public requestedFeedbackCalls: {delivery: Delivery, message:string}[] = [];
 
     requestFeedback(delivery: Delivery, message: string): Promise<any> {
@@ -37,7 +59,7 @@ function expectDeliveryToBe(delivery: Delivery, expectedArrived: boolean, expect
     expect(delivery.timeOfDelivery).toBe(expectedTimeOfDelivery);
 }
 
-describe("WTf does the controller do", () => {
+describe("WTF does the controller do", () => {
     it("should call the feedbackRequester when a delivery has been made", async () => {
         const id = "123";
         const deliveries: Delivery[] = [createDelivery(id)];
@@ -72,7 +94,7 @@ describe("WTf does the controller do", () => {
     })
 
     describe("when there are two deliveries", () => {
-        it("should sends an email to each delivery when it is made", async () => {
+        it("should send an email to each delivery when it is made", async () => {
             const id = "1";
             const id2 = "2";
             const deliveries: Delivery[] = [createDelivery(id), createDelivery(id2)];
@@ -108,7 +130,8 @@ describe("WTf does the controller do", () => {
                 const id2 = "2";
                 const deliveries: Delivery[] = [createDelivery(id), createDelivery(id2)];
                 const fakeContactCustomer = new FakeContactCustomer();
-                const deliveryController = new DeliveryController(deliveries, fakeContactCustomer);
+                const fakeMapService = new FakeMapService();
+                const deliveryController = new DeliveryController(deliveries, fakeContactCustomer, fakeMapService);
                 const deliveryEvent1 = {
                     id: id,
                     timeOfDelivery: new Date(deliveries[0].timeOfDelivery.getTime() + GREATER_THAN_TEN_MINUTES),
@@ -126,7 +149,7 @@ describe("WTf does the controller do", () => {
                 await deliveryController.updateDelivery(deliveryEvent2);
 
                 expectDeliveryToBe(deliveries[1], true, false, deliveryEvent2.timeOfDelivery);
-
+                expect(fakeMapService.calculateETACalls).toHaveLength(1);
             })
         })
 
