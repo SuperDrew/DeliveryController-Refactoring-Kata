@@ -125,7 +125,7 @@ describe("WTF does the controller do", () => {
         })
 
         describe("and first one is late", () => {
-            it("should update the eta for the second one", async () => {
+            it("should update the eta for the second one after updating the average speed", async () => {
                 const id = "1";
                 const id2 = "2";
                 const deliveries: Delivery[] = [createDelivery(id), createDelivery(id2)];
@@ -150,6 +150,7 @@ describe("WTF does the controller do", () => {
 
                 expectDeliveryToBe(deliveries[1], true, false, deliveryEvent2.timeOfDelivery);
                 expect(fakeMapService.calculateETACalls).toHaveLength(1);
+                expect(fakeMapService.updateAverageSpeedCalls).toHaveLength(1);
             })
         })
 

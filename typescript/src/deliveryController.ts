@@ -41,7 +41,7 @@ export class DeliveryController {
                     delivery.onTime = true;
                 }
                 delivery.timeOfDelivery = event.timeOfDelivery;
-                let message = `Regarding your delivery today at ${delivery.timeOfDelivery}. How likely would you be to recommend this delivery service to a friend? Click <a href='url'>here</a>`
+                const message = `Regarding your delivery today at ${delivery.timeOfDelivery}. How likely would you be to recommend this delivery service to a friend? Click <a href='url'>here</a>`
                 await this.#contactCustomer.requestFeedback(delivery, message);
                 if(this.#deliveries.length > i + 1) {
                     nextDelivery = this.#deliveries[i + 1];
