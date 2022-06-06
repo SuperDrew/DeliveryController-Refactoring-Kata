@@ -1,5 +1,5 @@
 import {Delivery, DeliveryController} from "./deliveryController";
-import {IContactCustomer} from "./emailGateway";
+import {ICustomerContacter} from "./emailGateway";
 import {IMapService, Location} from "./mapService";
 
 const GREATER_THAN_TEN_MINUTES = 1000 * 60 * 10 + 1;
@@ -25,7 +25,7 @@ class FakeMapService implements IMapService {
     }
 }
 
-class FakeContactCustomer implements IContactCustomer {
+class FakeCustomerContacter implements ICustomerContacter {
     public notifyDeliveryEtaCalls: {delivery:Delivery, message:string}[] = [];
     public requestedFeedbackCalls: {delivery: Delivery, message:string}[] = [];
 
@@ -63,7 +63,7 @@ describe("WTF does the controller do", () => {
     it("should call the feedbackRequester when a delivery has been made", async () => {
         const id = "123";
         const deliveries: Delivery[] = [createDelivery(id)];
-        const fakeContactCustomer = new FakeContactCustomer();
+        const fakeContactCustomer = new FakeCustomerContacter();
         const deliveryController = new DeliveryController(deliveries, fakeContactCustomer);
         const deliveryEvent = {
             id: id,
@@ -81,7 +81,7 @@ describe("WTF does the controller do", () => {
     it("updates the delivery when it is made", async () => {
         const id = "123";
         const deliveries: Delivery[] = [createDelivery(id)];
-        const fakeContactCustomer = new FakeContactCustomer();
+        const fakeContactCustomer = new FakeCustomerContacter();
         const deliveryController = new DeliveryController(deliveries, fakeContactCustomer);
         const deliveryEvent = {
             id: id,
@@ -98,7 +98,7 @@ describe("WTF does the controller do", () => {
             const id = "1";
             const id2 = "2";
             const deliveries: Delivery[] = [createDelivery(id), createDelivery(id2)];
-            const fakeContactCustomer = new FakeContactCustomer();
+            const fakeContactCustomer = new FakeCustomerContacter();
             const deliveryController = new DeliveryController(deliveries, fakeContactCustomer);
             const deliveryEvent1 = {
                 id: id,
@@ -129,7 +129,7 @@ describe("WTF does the controller do", () => {
                 const id = "1";
                 const id2 = "2";
                 const deliveries: Delivery[] = [createDelivery(id), createDelivery(id2)];
-                const fakeContactCustomer = new FakeContactCustomer();
+                const fakeContactCustomer = new FakeCustomerContacter();
                 const fakeMapService = new FakeMapService();
                 const deliveryController = new DeliveryController(deliveries, fakeContactCustomer, fakeMapService);
                 const deliveryEvent1 = {

@@ -1,4 +1,4 @@
-import {IContactCustomer} from './emailGateway'
+import {ICustomerContacter} from './emailGateway'
 import {Location, MapService, IMapService} from './mapService';
 
 const TEN_MINUTES = 1000 * 60 * 10;
@@ -19,11 +19,11 @@ export interface DeliveryEvent {
 }
 
 export class DeliveryController {
-    #contactCustomer: IContactCustomer;
+    #contactCustomer: ICustomerContacter;
     #mapService: IMapService;
     readonly #deliveries: Array<Delivery>;
 
-    constructor(deliveries: Array<Delivery>, contactCustomer: IContactCustomer, mapService: IMapService = new MapService()) {
+    constructor(deliveries: Array<Delivery>, contactCustomer: ICustomerContacter, mapService: IMapService = new MapService()) {
         this.#deliveries = deliveries;
         this.#mapService = mapService;
         this.#contactCustomer = contactCustomer;
