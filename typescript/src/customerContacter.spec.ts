@@ -4,7 +4,6 @@ import {IEmailGateway} from "./emailGateway";
 import {ISmsGateway} from "./smsGateway";
 import {createDelivery} from "./testUtils";
 
-
 class FakeEmailGateway implements IEmailGateway {
     public sendEmailCalls: {subject: string, to: string, text: string}[] = [];
     sendEmail(subject: string, to: string, text: string): Promise<void> {
@@ -27,10 +26,8 @@ describe("When the customer is contacted", () => {
             // Arrange
             const fakeEmailGateway = new FakeEmailGateway();
             const customerContacter = new CustomerContacter(fakeEmailGateway);
-            const delivery = createDelivery({id: "1"});
-            delivery.preferredContactMethod = ContactMethod.Email;
             const expectedEmailAddress = "test@test.com";
-            delivery.contactEmail = expectedEmailAddress;
+            const delivery = createDelivery({id: "1", preferredContactMethod: ContactMethod.Email, contactEmail: expectedEmailAddress});
             const expectedMessage = "requested feedback have I";
 
             // Act
@@ -47,10 +44,8 @@ describe("When the customer is contacted", () => {
             // Arrange
             const fakeEmailGateway = new FakeEmailGateway();
             const customerContacter = new CustomerContacter(fakeEmailGateway);
-            const delivery = createDelivery({id: "1"});
-            delivery.preferredContactMethod = ContactMethod.Email;
             const expectedEmailAddress = "test@test.com";
-            delivery.contactEmail = expectedEmailAddress;
+            const delivery = createDelivery({id: "1", preferredContactMethod: ContactMethod.Email, contactEmail: expectedEmailAddress});
             const expectedMessage = "notify of delivery have I";
 
             // Act
@@ -70,10 +65,8 @@ describe("When the customer is contacted", () => {
             const fakeEmailGateway = new FakeEmailGateway();
             const fakeSmsGateway = new FakeSmsGateway();
             const customerContacter = new CustomerContacter(fakeEmailGateway, fakeSmsGateway);
-            const delivery = createDelivery({id: "1"});
-            delivery.preferredContactMethod = ContactMethod.Sms;
             const expectedMobileNumber ="+44799143833"
-            delivery.mobileNumber = expectedMobileNumber;
+            const delivery = createDelivery({id: "1", preferredContactMethod: ContactMethod.Sms, mobileNumber: expectedMobileNumber});
             const expectedMessage = "requested feedback have I";
 
             // Act
@@ -90,10 +83,8 @@ describe("When the customer is contacted", () => {
             const fakeEmailGateway = new FakeEmailGateway();
             const fakeSmsGateway = new FakeSmsGateway();
             const customerContacter = new CustomerContacter(fakeEmailGateway, fakeSmsGateway);
-            const delivery = createDelivery({id: "1"});
-            delivery.preferredContactMethod = ContactMethod.Sms;
             const expectedMobileNumber ="+44799143833"
-            delivery.mobileNumber = expectedMobileNumber;
+            const delivery = createDelivery({id: "1", preferredContactMethod: ContactMethod.Sms, mobileNumber: expectedMobileNumber});
             const expectedMessage = "notify of delivery have I";
 
             // Act
