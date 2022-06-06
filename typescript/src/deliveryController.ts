@@ -10,8 +10,8 @@ export enum ContactMethod {
 
 export interface Delivery {
     id: string
-    mobileNumber: string;
     preferredContactMethod: ContactMethod
+    mobileNumber: string;
     contactEmail: string
     location: Location
     timeOfDelivery: Date
