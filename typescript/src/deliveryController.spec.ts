@@ -42,6 +42,7 @@ class FakeCustomerContacter implements ICustomerContacter {
 
 export function createDelivery(id: string, timeOfDelivery: Date = new Date()): Delivery {
     return {
+        mobileNumber: "",
         id: id,
         preferredContactMethod: ContactMethod.Email,
         contactEmail: "test@test.com",
