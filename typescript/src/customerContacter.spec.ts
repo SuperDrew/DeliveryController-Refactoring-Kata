@@ -1,8 +1,8 @@
 import {CustomerContacter} from "./customerContacter";
-import {createDelivery} from "./deliveryController.spec";
 import {ContactMethod} from "./deliveryController";
 import {IEmailGateway} from "./emailGateway";
 import {ISmsGateway} from "./smsGateway";
+import {createDelivery} from "./testUtils";
 
 
 class FakeEmailGateway implements IEmailGateway {
@@ -15,7 +15,6 @@ class FakeEmailGateway implements IEmailGateway {
 
 class FakeSmsGateway implements ISmsGateway {
     public sendSmsCalls: {to: string, text: string}[] = [];
-
     sendSms(to: string, text: string): Promise<void> {
         this.sendSmsCalls.push({to, text});
         return Promise.resolve(undefined);
@@ -28,7 +27,7 @@ describe("When the customer is contacted", () => {
             // Arrange
             const fakeEmailGateway = new FakeEmailGateway();
             const customerContacter = new CustomerContacter(fakeEmailGateway);
-            const delivery = createDelivery("1");
+            const delivery = createDelivery({id: "1"});
             delivery.preferredContactMethod = ContactMethod.Email;
             const expectedEmailAddress = "test@test.com";
             delivery.contactEmail = expectedEmailAddress;
@@ -48,7 +47,7 @@ describe("When the customer is contacted", () => {
             // Arrange
             const fakeEmailGateway = new FakeEmailGateway();
             const customerContacter = new CustomerContacter(fakeEmailGateway);
-            const delivery = createDelivery("1");
+            const delivery = createDelivery({id: "1"});
             delivery.preferredContactMethod = ContactMethod.Email;
             const expectedEmailAddress = "test@test.com";
             delivery.contactEmail = expectedEmailAddress;
@@ -64,13 +63,14 @@ describe("When the customer is contacted", () => {
             expect(fakeEmailGateway.sendEmailCalls[0].text).toBe(expectedMessage);
         })
     })
+
     describe("and the delivery indicates sms is the preferred contact method", () => {
         it("should send an sms when request feedback is called", () => {
             // Arrange
             const fakeEmailGateway = new FakeEmailGateway();
             const fakeSmsGateway = new FakeSmsGateway();
             const customerContacter = new CustomerContacter(fakeEmailGateway, fakeSmsGateway);
-            const delivery = createDelivery("1");
+            const delivery = createDelivery({id: "1"});
             delivery.preferredContactMethod = ContactMethod.Sms;
             const expectedMobileNumber ="+44799143833"
             delivery.mobileNumber = expectedMobileNumber;
@@ -84,12 +84,13 @@ describe("When the customer is contacted", () => {
             expect(fakeSmsGateway.sendSmsCalls[0].to).toBe(expectedMobileNumber);
             expect(fakeSmsGateway.sendSmsCalls[0].text).toBe(expectedMessage);
         })
+
         it("should send an sms when the eta is updated", () => {
             // Arrange
             const fakeEmailGateway = new FakeEmailGateway();
             const fakeSmsGateway = new FakeSmsGateway();
             const customerContacter = new CustomerContacter(fakeEmailGateway, fakeSmsGateway);
-            const delivery = createDelivery("1");
+            const delivery = createDelivery({id: "1"});
             delivery.preferredContactMethod = ContactMethod.Sms;
             const expectedMobileNumber ="+44799143833"
             delivery.mobileNumber = expectedMobileNumber;
