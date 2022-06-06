@@ -18,12 +18,12 @@ export interface DeliveryWithAllOptionalFields {
 export function createDelivery(deliveryOverrides: DeliveryWithAllOptionalFields): Delivery {
     return {
         arrived: deliveryOverrides.arrived ?? false,
-        contactEmail: deliveryOverrides.contactEmail ?? "",
-        id: deliveryOverrides.id ?? "",
+        contactEmail: deliveryOverrides.contactEmail ?? "test@test.com",
+        id: deliveryOverrides.id ?? "1",
         location: deliveryOverrides.location ?? {
             latitude: 12.34, longitude: 56.78
         },
-        mobileNumber: deliveryOverrides.mobileNumber ?? "",
+        mobileNumber: deliveryOverrides.mobileNumber ?? "+44768254184",
         onTime: deliveryOverrides.onTime ?? false,
         preferredContactMethod: deliveryOverrides.preferredContactMethod ?? ContactMethod.Email,
         timeOfDelivery: deliveryOverrides.timeOfDelivery ?? new Date()
