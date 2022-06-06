@@ -1,10 +1,16 @@
-import {ICustomerContacter} from './emailGateway'
+import {ICustomerContacter} from './customerContacter'
 import {Location, MapService, IMapService} from './mapService';
 
 const TEN_MINUTES = 1000 * 60 * 10;
 
+export enum ContactMethod {
+    Email,
+    Sms
+}
+
 export interface Delivery {
     id: string
+    preferredContactMethod: ContactMethod
     contactEmail: string
     location: Location
     timeOfDelivery: Date

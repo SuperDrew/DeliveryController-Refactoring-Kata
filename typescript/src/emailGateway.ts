@@ -1,39 +1,27 @@
 import nodemailer from "nodemailer";
-import {Delivery} from "./deliveryController";
 
-export interface ICustomerContacter {
-    notifyDeliveryEta(delivery: Delivery, message: string): Promise<any>;
-    requestFeedback(delivery: Delivery, message: string): Promise<any>;
+export interface IEmailGateway {
+    sendEmail(subject: string, to: string, text: string): Promise<any>;
 }
 
-export class EmailGateway implements ICustomerContacter {
+export class EmailGateway implements IEmailGateway {
     #transport: nodemailer.Transporter
-    feedbackSubject = "Your feedback is important to us";
 
     constructor() {
         this.#transport = nodemailer.createTransport({
-                host: 'localhost',
-                port: 25,
-                secure: false,
-                logger: true
-        } );
+            host: 'localhost',
+            port: 25,
+            secure: false,
+            logger: true
+        });
 
     }
 
-    async requestFeedback(delivery: Delivery, message: string) {
+    async sendEmail(subject: string, to: string, text: string) {
         return this.#transport.sendMail({
-            subject: this.feedbackSubject,
-            to: delivery.contactEmail,
-            text: message
+            subject: subject,
+            to: to,
+            text: text
         })
-
-    }
-
-    async notifyDeliveryEta(delivery: Delivery, message: string): Promise<any> {
-        return this.#transport.sendMail({
-            subject: "Your delivery will arrive soon.",
-            to: delivery.contactEmail,
-            text: message
-        })
-    }
+    };
 }

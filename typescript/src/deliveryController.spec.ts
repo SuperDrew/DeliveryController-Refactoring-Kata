@@ -1,5 +1,5 @@
-import {Delivery, DeliveryController} from "./deliveryController";
-import {ICustomerContacter} from "./emailGateway";
+import {ContactMethod, Delivery, DeliveryController} from "./deliveryController";
+import {ICustomerContacter} from "./customerContacter";
 import {IMapService, Location} from "./mapService";
 
 const GREATER_THAN_TEN_MINUTES = 1000 * 60 * 10 + 1;
@@ -40,9 +40,10 @@ class FakeCustomerContacter implements ICustomerContacter {
     }
 }
 
-function createDelivery(id: string, timeOfDelivery: Date = new Date()) {
+export function createDelivery(id: string, timeOfDelivery: Date = new Date()): Delivery {
     return {
         id: id,
+        preferredContactMethod: ContactMethod.Email,
         contactEmail: "test@test.com",
         location: {
             latitude: 12.34, longitude: 56.78
