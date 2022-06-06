@@ -25,7 +25,8 @@ describe("When the customer is contacted", () => {
         it("should send an email when request feedback is called", () => {
             // Arrange
             const fakeEmailGateway = new FakeEmailGateway();
-            const customerContacter = new CustomerContacter(fakeEmailGateway);
+            const fakeSmsGateway = new FakeSmsGateway();
+            const customerContacter = new CustomerContacter(fakeEmailGateway, fakeSmsGateway);
             const expectedEmailAddress = "test@test.com";
             const delivery = createDelivery({id: "1", preferredContactMethod: ContactMethod.Email, contactEmail: expectedEmailAddress});
             const expectedMessage = "requested feedback have I";
@@ -43,7 +44,8 @@ describe("When the customer is contacted", () => {
         it("should send an email when the eta is updated is called", () => {
             // Arrange
             const fakeEmailGateway = new FakeEmailGateway();
-            const customerContacter = new CustomerContacter(fakeEmailGateway);
+            const fakeSmsGateway = new FakeSmsGateway();
+            const customerContacter = new CustomerContacter(fakeEmailGateway, fakeSmsGateway);
             const expectedEmailAddress = "test@test.com";
             const delivery = createDelivery({id: "1", preferredContactMethod: ContactMethod.Email, contactEmail: expectedEmailAddress});
             const expectedMessage = "notify of delivery have I";

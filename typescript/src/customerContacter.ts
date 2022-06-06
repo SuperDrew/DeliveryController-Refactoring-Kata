@@ -1,6 +1,6 @@
 import {ContactMethod, Delivery} from "./deliveryController";
-import {EmailGateway, IEmailGateway} from "./emailGateway";
-import {ISmsGateway, SmsGateway} from "./smsGateway";
+import {IEmailGateway} from "./emailGateway";
+import {ISmsGateway} from "./smsGateway";
 
 export interface ICustomerContacter {
     notifyDeliveryEta(delivery: Delivery, message: string): Promise<any>;
@@ -8,10 +8,7 @@ export interface ICustomerContacter {
 }
 
 export class CustomerContacter implements ICustomerContacter {
-    #feedbackSubject = "Your feedback is important to us";
-    #notifyDeliverySubject = "Your delivery will arrive soon.";
-
-    constructor(private emailGateway: IEmailGateway = new EmailGateway(), private smsGateway: ISmsGateway = new SmsGateway()) {}
+    constructor(private emailGateway: IEmailGateway, private smsGateway: ISmsGateway) {}
 
     async requestFeedback(delivery: Delivery, message: string): Promise<any> {
         if (delivery.preferredContactMethod === ContactMethod.Email)
