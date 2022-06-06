@@ -26,7 +26,7 @@ export function createDelivery(deliveryOverrides: DeliveryWithAllOptionalFields)
         mobileNumber: deliveryOverrides.mobileNumber ?? "+44768254184",
         onTime: deliveryOverrides.onTime ?? false,
         preferredContactMethod: deliveryOverrides.preferredContactMethod ?? ContactMethod.Email,
-        timeOfDelivery: deliveryOverrides.timeOfDelivery ?? new Date()
+        timeOfDelivery: deliveryOverrides.timeOfDelivery ?? new Date(1654520776559)
     }
 }
 
