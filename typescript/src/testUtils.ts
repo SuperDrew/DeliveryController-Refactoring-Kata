@@ -6,16 +6,17 @@ export type TwoLocations = { location1: Location, location2: Location };
 
 export function createDelivery(deliveryOverrides: Partial<Delivery>): Delivery {
     return {
-        arrived: deliveryOverrides.arrived ?? false,
-        contactEmail: deliveryOverrides.contactEmail ?? "test@test.com",
-        id: deliveryOverrides.id ?? "1",
-        location: deliveryOverrides.location ?? {
+        arrived: false,
+        contactEmail: "test@test.com",
+        id: "1",
+        location: {
             latitude: 12.34, longitude: 56.78
         },
-        mobileNumber: deliveryOverrides.mobileNumber ?? "+44768254184",
-        onTime: deliveryOverrides.onTime ?? false,
-        preferredContactMethod: deliveryOverrides.preferredContactMethod ?? ContactMethod.Email,
-        timeOfDelivery: deliveryOverrides.timeOfDelivery ?? new Date(1654520776559)
+        mobileNumber: "+44768254184",
+        onTime: false,
+        preferredContactMethod: ContactMethod.Email,
+        timeOfDelivery: new Date(1654520776559),
+        ...deliveryOverrides
     }
 }
 
