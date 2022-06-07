@@ -4,18 +4,7 @@ import {ContactMethod, Delivery} from "./deliveryController";
 export const GREATER_THAN_TEN_MINUTES = 1000 * 60 * 10 + 1;
 export type TwoLocations = { location1: Location, location2: Location };
 
-export interface DeliveryWithAllOptionalFields {
-    id?: string
-    preferredContactMethod?: ContactMethod
-    mobileNumber?: string;
-    contactEmail?: string
-    location?: Location
-    timeOfDelivery?: Date
-    arrived?: boolean
-    onTime?: boolean
-}
-
-export function createDelivery(deliveryOverrides: DeliveryWithAllOptionalFields): Delivery {
+export function createDelivery(deliveryOverrides: Partial<Delivery>): Delivery {
     return {
         arrived: deliveryOverrides.arrived ?? false,
         contactEmail: deliveryOverrides.contactEmail ?? "test@test.com",
